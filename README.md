@@ -5,8 +5,6 @@
 
 Study Sensei is a full-stack learning companion that combines traditional study management tools (like task tracking and planners) with AI-powered features. Leveraging a provider-agnostic AI setup (defaulting to HuggingFace Mistral, but compatible with Google Gemini, Anthropic, Groq, etc.), Study Sensei provides students with an interactive AI tutor, automatic quiz generation, dynamic study plans, and comprehensive performance analytics.
 
-![Dashboard Preview](attached_assets/hero-bg.jpg) 
-
 ---
 
 ## 🚀 Features
