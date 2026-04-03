@@ -10,6 +10,9 @@ import {
   BookOpen
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
+import { getErrorMessage } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
 const NAV_ITEMS = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/" },
@@ -20,7 +23,26 @@ const NAV_ITEMS = [
 ];
 
 export function Sidebar() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
+  const { toast } = useToast();
+  const { logout, logoutMutation, user } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Signed out",
+        description: "Your session has been cleared.",
+      });
+      setLocation("/login");
+    } catch (error) {
+      toast({
+        title: "Logout failed",
+        description: getErrorMessage(error, "Please try again."),
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col fixed left-0 top-0">
@@ -30,7 +52,7 @@ export function Sidebar() {
             <BookOpen className="w-5 h-5" />
           </div>
           <h1 className="font-heading font-bold text-lg text-sidebar-foreground tracking-tight">
-            StudySmart
+            Study Sensei
           </h1>
         </div>
 
@@ -68,13 +90,25 @@ export function Sidebar() {
         </button>
         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-sidebar-border">
           <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground font-bold text-xs">
-            JD
+            {user?.avatarInitials ?? "SS"}
           </div>
           <div className="flex-1 text-left">
-            <p className="text-sm font-medium text-sidebar-foreground">John Doe</p>
-            <p className="text-xs text-muted-foreground">Student Pro</p>
+            <p className="text-sm font-medium text-sidebar-foreground">
+              {user?.name ?? "Study Sensei"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {user?.email ?? "Signed in"}
+            </p>
           </div>
-          <LogOut className="w-4 h-4 text-muted-foreground hover:text-destructive cursor-pointer" />
+          <button
+            aria-label="Log out"
+            className="text-muted-foreground hover:text-destructive cursor-pointer disabled:opacity-50"
+            disabled={logoutMutation.isPending}
+            onClick={() => void handleLogout()}
+            type="button"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>
