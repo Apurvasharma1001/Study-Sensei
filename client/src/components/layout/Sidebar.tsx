@@ -61,7 +61,7 @@ export function Sidebar() {
             const isActive = location === item.href;
             return (
               <Link key={item.href} href={item.href}>
-                <a 
+                <div 
                   className={cn(
                     "flex items-center gap-3 px-3 py-2.5 rounded-md transition-all duration-200 group",
                     isActive 
@@ -76,7 +76,7 @@ export function Sidebar() {
                     )} 
                   />
                   {item.label}
-                </a>
+                </div>
               </Link>
             );
           })}
